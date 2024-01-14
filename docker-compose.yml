@@ -1,0 +1,25 @@
+version: '3'
+services:
+  api:
+    image: redhatmg/tutorial
+    environment:
+      DATABASE_URL: "postgresql://root:secret@usersdb:5432"
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  db:
+    image: postgres:15.2-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
